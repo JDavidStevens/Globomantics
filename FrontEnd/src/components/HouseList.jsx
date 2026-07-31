@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import HouseRow from "./HouseRow";
 import AddHouse from "./AddHouse";
+import useHouses from "./hooks/useHouses";
+import loadingStatus from "./hooks/loadingStatus";
+import LoadingIndicator from "./loadingIndicator";
+import ErrorBoundary from "./ErrorBoundry";
 
-const HouseList = () => {
-  const [houses, setHouses] = useState([]);
+const HouseList = ({ selectHouse }) => {
+  const { houses, setHouses, loadingState } = useHouses();
 
-  useEffect(() => {
-    const fetchHouses = async () => {
-      const response = await fetch("http://localhost:5000/house");
-      const houses = await response.json();
-      setHouses(houses);
-    };
-    fetchHouses();
-  }, []);
+  if (loadingState !== loadingStatus.loaded)
+    return <LoadingIndicator loadingState={loadingState} />;
 
   return (
     <>
@@ -30,12 +28,14 @@ const HouseList = () => {
           </tr>
         </thead>
         <tbody>
-          {houses.map((h) => (
-            <HouseRow key={h.id} house={h} />
-          ))}
+          <ErrorBoundary fallback="Error loading house rows!">
+            {houses.map((h) => (
+              <HouseRow key={h.id} selectHouse={selectHouse} house={h} />
+            ))}
+          </ErrorBoundary>
         </tbody>
       </table>
-      <AddHouse houses={houses} setHouses={setHouses}></AddHouse>
+      <AddHouse setHouses={setHouses}></AddHouse>
     </>
   );
 };
