@@ -1,8 +1,12 @@
-import { Activity } from "react";
+import { Activity, useContext } from "react";
 import { useState } from "react";
 import currencyFormatter from "./helpers/currencyFormatter";
+import navigationContext from "./navigation/navigationContext";
+import { useLocation } from "react-router";
 
-const House = ({ house }) => {
+const House = () => {
+  const location = useLocation();
+  const { house } = location.state;
   const [visible, setVisibility] = useState(false);
   return (
     <>

@@ -6,7 +6,7 @@ import loadingStatus from "./hooks/loadingStatus";
 import LoadingIndicator from "./loadingIndicator";
 import ErrorBoundary from "./ErrorBoundry";
 
-const HouseList = ({ selectHouse }) => {
+const HouseList = () => {
   const { houses, setHouses, loadingState } = useHouses();
 
   if (loadingState !== loadingStatus.loaded)
@@ -30,7 +30,7 @@ const HouseList = ({ selectHouse }) => {
         <tbody>
           <ErrorBoundary fallback="Error loading house rows!">
             {houses.map((h) => (
-              <HouseRow key={h.id} selectHouse={selectHouse} house={h} />
+              <HouseRow key={h.id} house={h} />
             ))}
           </ErrorBoundary>
         </tbody>
